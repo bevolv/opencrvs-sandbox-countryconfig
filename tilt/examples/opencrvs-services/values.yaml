@@ -1,19 +1,34 @@
+hostname: opencrvs.localhost
+
 ingress:
   ssl_enabled: false
 
 env:
   OPENCRVS_ENVIRONMENT: development
+  # NOTE: client nginx uses unquoted sed for this value — spaces crash the pod
+  # ("sed: unmatched '~'"). Use a single token. `*` allows Chatwoot + local http hosts for PoC.
+  # Prefer a proper quoted sed / dedicated CSP entries in core for production.
+  CONTENT_SECURITY_POLICY_WILDCARD: "*"
+
+auth:
+  env:
+    TWO_FA_ENABLED: false
 
 credentials:
   super_user_password: password
 
 # OpenCRVS core image tag:
 platform:
-  tag: v2.0.0-beta
+  tag: v2.0.2
 
 countryconfig:
   image:
-    tag: v1.9.11
+    name: local/ocrvs-countryconfig
+    tag: local
+  env:
+    CHATWOOT_ENABLED: "true"
+    CHATWOOT_WEBSITE_TOKEN: "NQCUFA57nEZi5hUQ7sSe8wQs"
+    CHATWOOT_BASE_URL: "https://app.chatwoot.com"
 
 # Horizontal Pod Autoscaler (HPA) configuration:
 # Disabled by default for local environment.

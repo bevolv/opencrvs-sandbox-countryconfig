@@ -1378,6 +1378,9 @@ const SPECIAL_NON_APPLICATION_ENVIRONMENTS = ['jump', 'backup']
       value: answerOrExisting(
         allAnswers.domain,
         findExistingValue('DOMAIN', 'VARIABLE', 'ENVIRONMENT', existingValues),
+        // Single token only: client nginx-deploy-config.sh uses unquoted sed;
+        // values with spaces (e.g. extra Chatwoot hosts) crash the client pod.
+        // Chatwoot needs a broader wildcard or a core CSP fix — see PoC tilt values (`*`).
         (val) => `*.${val}`
       ),
       didExist: findExistingValue(

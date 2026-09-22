@@ -29,8 +29,12 @@ import {
   AUTH_URL,
   DEFAULT_TIMEOUT,
   GATEWAY_URL,
-  THIRTY_MINUTES_IN_MILLISECONDS
+  THIRTY_MINUTES_IN_MILLISECONDS,
+  CHATWOOT_ENABLED,
+  CHATWOOT_WEBSITE_TOKEN,
+  CHATWOOT_BASE_URL
 } from '@countryconfig/constants'
+import { buildChatwootWidgetScript } from '@countryconfig/chatwoot/widgetScript'
 import {
   contentHandler,
   countryLogoHandler
@@ -293,8 +297,15 @@ export async function createServer() {
     handler: (_request, h) => {
       const config =
         process.env.NODE_ENV === 'production' ? clientConfigProd : clientConfig
+      const chatwootScript = buildChatwootWidgetScript({
+        enabled: CHATWOOT_ENABLED,
+        websiteToken: CHATWOOT_WEBSITE_TOKEN,
+        baseUrl: CHATWOOT_BASE_URL
+      })
       return h
-        .response(`window.config = ${JSON.stringify(config)}`)
+        .response(
+          `window.config = ${JSON.stringify(config)};\n${chatwootScript}`
+        )
         .type('application/javascript')
     },
     options: {
