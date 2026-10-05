@@ -19,16 +19,11 @@ credentials:
 
 # OpenCRVS core image tag:
 platform:
-  tag: v2.0.2
+  tag: v2.0.0
 
 countryconfig:
   image:
-    name: local/ocrvs-countryconfig
-    tag: local
-  env:
-    CHATWOOT_ENABLED: "true"
-    CHATWOOT_WEBSITE_TOKEN: "TSkjZmqpXWRb7FXdrwUgH17z"
-    CHATWOOT_BASE_URL: "https://support.crvs.bevolv.co"
+    tag: v2.0.0
 
 # Horizontal Pod Autoscaler (HPA) configuration:
 # Disabled by default for local environment.
@@ -47,3 +42,16 @@ dashboards:
 
 # Expose services on Node port
 service_type: NodePort
+
+data_seed:
+  enabled: false
+  env:
+    ACTIVATE_USERS: true
+
+auth:
+  env:
+    TWO_FA_ENABLED: false
+
+events:
+  env:
+    TWO_FA_ENABLED: false

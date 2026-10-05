@@ -4,11 +4,9 @@
 # https://github.com/opencrvs/infrastructure/blob/develop/Tiltfile
 
 # OpenCRVS core images tag:
-# For releases it's ok to keeps same as branch_or_tag
-core_images_tag = os.getenv("OPENCRVS_CORE_IMAGE_TAG", "v2.0.2")
+core_images_tag = os.getenv("OPENCRVS_CORE_IMAGE_TAG", "v2.0.1")
 
-# FIXME: Put release version
-core_ref = os.getenv("OPENCRVS_CORE_REF", "release/2.0.0")
+core_ref = os.getenv("OPENCRVS_CORE_REF", "release/2.0.1")
 
 # Local image ref MUST contain a "/" so the Helm helper does not prefix
 # ghcr.io/opencrvs/ (see charts/.../_image-registry-helper.tpl).
@@ -63,12 +61,13 @@ docker_build(
   ".",
   dockerfile="Dockerfile",
   network="host",
+  entrypoint=["yarn", "start:tilt"],
   only=[
     './src',
+    './typings',
     './package.json',
     './yarn.lock',
     './tsconfig.json',
-    './start-prod.sh',
     './Dockerfile'
   ],
   live_update=[
@@ -76,8 +75,8 @@ docker_build(
     fall_back_on(['package.json', 'yarn.lock', 'Dockerfile']),
     # Sync source code changes
     sync('./src', '/usr/src/app/src'),
-    # Sync start script if it changes
-    sync('./start-prod.sh', '/usr/src/app/start-prod.sh'),
+    # tsconfig.json's "include" pulls in typings/ for type-checking
+    sync('./typings', '/usr/src/app/typings'),
   ]
 )
 

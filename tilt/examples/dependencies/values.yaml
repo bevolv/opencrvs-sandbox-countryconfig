@@ -19,3 +19,5 @@ elasticsearch:
     cpuRequest: '250m'
     memoryLimit: '2Gi'
     cpuLimit: '2'
+
+storage_type: host_path
