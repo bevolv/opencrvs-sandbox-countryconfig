@@ -3,4 +3,21 @@ hostname: opencrvs.localhost
 ingress:
   ssl_enabled: false
 
+# Minikube/WSL often has <8 CPUs; chart default cpuLimit: 8 breaks pods with:
+# failed to write "800000" ... cpu.cfs_quota_us: invalid argument
+resources:
+  memoryRequest: '100Mi'
+  cpuRequest: '100m'
+  memoryLimit: '2Gi'
+  cpuLimit: '2'
+
+elasticsearch:
+  # Chart default heap is -Xmx8192m; that OOMKills under a 2Gi pod limit.
+  java_opts: '-Xms512m -Xmx1024m'
+  resources:
+    memoryRequest: '1Gi'
+    cpuRequest: '250m'
+    memoryLimit: '2Gi'
+    cpuLimit: '2'
+
 storage_type: host_path

@@ -116,7 +116,7 @@ opensrvs_services = [
   'auth',
   'client',
   'countryconfig',
-  'documents', 
+  'documents',
   'events',
   'gateway',
   'login',

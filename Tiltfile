@@ -8,9 +8,14 @@ core_images_tag = os.getenv("OPENCRVS_CORE_IMAGE_TAG", "v2.0.1")
 
 core_ref = os.getenv("OPENCRVS_CORE_REF", "release/2.0.1")
 
-# Build countryconfig image in local registry (use any name and tag you want)
-countryconfig_image_name="opencrvs/ocrvs-countryconfig"
-countryconfig_image_tag="local"
+# Local image ref MUST contain a "/" so the Helm helper does not prefix
+# ghcr.io/opencrvs/ (see charts/.../_image-registry-helper.tpl).
+# For minikube, run before tilt up:
+#   eval $(minikube docker-env)
+countryconfig_image_name = os.getenv("COUNTRYCONFIG_IMAGE_NAME", "local/ocrvs-countryconfig")
+countryconfig_image_tag = os.getenv("COUNTRYCONFIG_IMAGE_TAG", "local")
+
+allow_k8s_contexts('minikube')
 
 
 # Internal variable for helm charts checkout
@@ -18,24 +23,32 @@ core_charts_dir = ".opencrvs-core-charts"
 
 core_repo_url = 'https://github.com/opencrvs/opencrvs-core.git'
 
-print("Cloning OpenCRVS Helm charts from {}...".format(core_repo_url))
-local("""
-  rm -rf {core_charts_dir}
-  git clone \
-    --depth 1 \
-    --filter=blob:none \
-    --sparse \
-    --branch {core_ref} \
-    {core_repo_url} \
-    {core_charts_dir}
+charts_ready = (
+  os.path.exists('{}/charts/dependencies'.format(core_charts_dir)) and
+  os.path.exists('{}/charts/opencrvs-services'.format(core_charts_dir))
+)
 
-  cd {core_charts_dir}
-  git sparse-checkout set charts
-""".format(
-  core_ref=core_ref,
-  core_charts_dir=core_charts_dir,
-  core_repo_url=core_repo_url
-))
+if charts_ready:
+  print("Using existing OpenCRVS Helm charts in {}...".format(core_charts_dir))
+else:
+  print("Cloning OpenCRVS Helm charts from {}...".format(core_repo_url))
+  local("""
+    rm -rf {core_charts_dir}
+    git clone \
+      --depth 1 \
+      --filter=blob:none \
+      --sparse \
+      --branch {core_ref} \
+      {core_repo_url} \
+      {core_charts_dir}
+
+    cd {core_charts_dir}
+    git sparse-checkout set charts
+  """.format(
+    core_ref=core_ref,
+    core_charts_dir=core_charts_dir,
+    core_repo_url=core_repo_url
+  ))
 
 if not os.path.exists('{core_charts_dir}/charts/dependencies'.format(core_charts_dir=core_charts_dir)) or not os.path.exists('{core_charts_dir}/charts/opencrvs-services'.format(core_charts_dir=core_charts_dir)):
   fail('Something went wrong while cloning infrastructure repository!')

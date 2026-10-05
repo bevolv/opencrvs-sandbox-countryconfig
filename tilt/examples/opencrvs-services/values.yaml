@@ -1,8 +1,18 @@
+hostname: opencrvs.localhost
+
 ingress:
   ssl_enabled: false
 
 env:
   OPENCRVS_ENVIRONMENT: development
+  # NOTE: client nginx uses unquoted sed for this value — spaces crash the pod
+  # ("sed: unmatched '~'"). Use a single token. `*` allows Chatwoot + local http hosts for PoC.
+  # Prefer a proper quoted sed / dedicated CSP entries in core for production.
+  CONTENT_SECURITY_POLICY_WILDCARD: "*"
+
+auth:
+  env:
+    TWO_FA_ENABLED: false
 
 credentials:
   super_user_password: password

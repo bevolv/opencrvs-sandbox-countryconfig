@@ -26,5 +26,17 @@ export const env = cleanEnv(process.env, {
     devDefault:
       'postgres://events_analytics:analytics_password@localhost:5432/events',
     desc: 'The database URL for reads and writes to `analytics.events`. See `/infrastructure/postgres/setup-analytics.sh` for how the default database is set up for your country.'
+  }),
+  CHATWOOT_ENABLED: bool({
+    default: false,
+    desc: 'When true, injects the Chatwoot support widget into /client-config.js'
+  }),
+  CHATWOOT_WEBSITE_TOKEN: str({
+    default: 'jCdSWWgw6AUwnHb4DfdH78Ux',
+    desc: 'Chatwoot website inbox token (public)'
+  }),
+  CHATWOOT_BASE_URL: url({
+    default: 'https://support.crvs.bevolv.co',
+    desc: 'Chatwoot instance base URL'
   })
 })

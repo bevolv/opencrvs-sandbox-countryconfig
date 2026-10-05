@@ -587,6 +587,9 @@ services:
       - INFOBIP_SENDER_ID=${INFOBIP_SENDER_ID:-}
       - DOMAIN={{hostname}}
       - ANALYTICS_DATABASE_URL=postgres://events_analytics:${ANALYTICS_POSTGRES_PASSWORD}@postgres/events
+      - CHATWOOT_ENABLED=${CHATWOOT_ENABLED:-false}
+      - CHATWOOT_WEBSITE_TOKEN=${CHATWOOT_WEBSITE_TOKEN:-jCdSWWgw6AUwnHb4DfdH78Ux}
+      - CHATWOOT_BASE_URL=${CHATWOOT_BASE_URL:-https://support.crvs.bevolv.co}
     networks:
       - overlay_net
     logging:
