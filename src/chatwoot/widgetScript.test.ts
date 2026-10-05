@@ -17,7 +17,7 @@ describe('buildChatwootWidgetScript', () => {
       buildChatwootWidgetScript({
         enabled: false,
         websiteToken: 'token',
-        baseUrl: 'https://app.chatwoot.com'
+        baseUrl: 'https://support.crvs.bevolv.co'
       })
     ).toBe('')
   })
@@ -27,7 +27,7 @@ describe('buildChatwootWidgetScript', () => {
       buildChatwootWidgetScript({
         enabled: true,
         websiteToken: '',
-        baseUrl: 'https://app.chatwoot.com'
+        baseUrl: 'https://support.crvs.bevolv.co'
       })
     ).toBe('')
   })
@@ -36,11 +36,11 @@ describe('buildChatwootWidgetScript', () => {
     const script = buildChatwootWidgetScript({
       enabled: true,
       websiteToken: 'jCdSWWgw6AUwnHb4DfdH78Ux',
-      baseUrl: 'https://app.chatwoot.com'
+      baseUrl: 'https://support.crvs.bevolv.co'
     })
 
     expect(script).toContain('jCdSWWgw6AUwnHb4DfdH78Ux')
-    expect(script).toContain('https://app.chatwoot.com')
+    expect(script).toContain('https://support.crvs.bevolv.co')
     expect(script).toContain('chatwootSDK.run')
     expect(script).toContain('setUser')
     expect(script).toContain('setCustomAttributes')
@@ -49,5 +49,6 @@ describe('buildChatwootWidgetScript', () => {
     expect(script).toContain('firstname')
     expect(script).toContain('surname')
     expect(script).toContain('primaryOfficeId')
+    expect(script).toContain('DOMContentLoaded')
   })
 })

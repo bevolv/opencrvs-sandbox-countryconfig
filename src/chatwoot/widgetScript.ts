@@ -200,19 +200,26 @@ export function buildChatwootWidgetScript(options: ChatwootWidgetOptions): strin
     startUserSync();
   });
 
-  ;(function (d, t) {
-    var g = d.createElement(t);
-    var s = d.getElementsByTagName(t)[0];
-    g.src = CHATWOOT_BASE_URL + '/packs/js/sdk.js';
-    g.async = true;
-    s.parentNode.insertBefore(g, s);
-    g.onload = function () {
+  // client-config.js runs synchronously in <head>; the SDK appends its widget to
+  // document.body, so it must not run before the body exists.
+  function loadChatwootSdk() {
+    var script = document.createElement('script');
+    script.src = CHATWOOT_BASE_URL + '/packs/js/sdk.js';
+    script.async = true;
+    script.onload = function () {
       window.chatwootSDK.run({
         websiteToken: CHATWOOT_WEBSITE_TOKEN,
         baseUrl: CHATWOOT_BASE_URL
       });
     };
-  })(document, 'script');
+    document.body.appendChild(script);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadChatwootSdk);
+  } else {
+    loadChatwootSdk();
+  }
 })();
 `
 }

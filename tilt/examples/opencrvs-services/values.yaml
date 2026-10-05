@@ -27,8 +27,8 @@ countryconfig:
     tag: local
   env:
     CHATWOOT_ENABLED: "true"
-    CHATWOOT_WEBSITE_TOKEN: "NQCUFA57nEZi5hUQ7sSe8wQs"
-    CHATWOOT_BASE_URL: "https://app.chatwoot.com"
+    CHATWOOT_WEBSITE_TOKEN: "TSkjZmqpXWRb7FXdrwUgH17z"
+    CHATWOOT_BASE_URL: "https://support.crvs.bevolv.co"
 
 # Horizontal Pod Autoscaler (HPA) configuration:
 # Disabled by default for local environment.

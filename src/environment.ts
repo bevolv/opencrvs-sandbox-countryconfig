@@ -36,7 +36,7 @@ export const env = cleanEnv(process.env, {
     desc: 'Chatwoot website inbox token (public)'
   }),
   CHATWOOT_BASE_URL: url({
-    default: 'https://app.chatwoot.com',
+    default: 'https://support.crvs.bevolv.co',
     desc: 'Chatwoot instance base URL'
   })
 })
